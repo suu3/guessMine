@@ -20,5 +20,13 @@ const io = socketIO(server);
 let sockets = [];
 
 io.on("connection", socket => {
-  socket.on("helloGuys", () => console.log("the client said hello"));
+  socket.on("newMessage", ({ message }) => {
+    socket.broadcast.emit("messageNotif", {
+      message,
+      nickname: socket.nickname || "Anon"
+    });
+  });
+  socket.on("setNickname", ({ nickname }) => {
+    socket.nickname = nickname;
+  });
 });
